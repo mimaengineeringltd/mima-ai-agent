@@ -31,11 +31,10 @@ jobs:
           gradle-version: '8.9'
 
       - name: Build Android APK
-        run: gradle -p extracted/MimaAIAgentAndroid assembleDebug
+        run: gradle -p extracted/MIMA_AI_Agent_Stage1/MimaAIAgentAndroid assembleDebug
 
       - name: Save APK
         uses: actions/upload-artifact@v4
         with:
           name: MIMA-AI-Agent-APK
-          path: extracted/MimaAIAgentAndroid/app/build/outputs/apk/debug/*.apk
-
+          path: extracted/MIMA_AI_Agent_Stage1/MimaAIAgentAndroid/app/build/outputs/apk/debug/*.apk
