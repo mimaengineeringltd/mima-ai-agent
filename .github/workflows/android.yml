@@ -1,1 +1,41 @@
 
+name: Build MIMA AI Agent APK
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'MIMA_AI_Agent_Stage1_Starter_Kit.zip'
+      - '.github/workflows/android.yml'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Get project files
+        uses: actions/checkout@v4
+
+      - name: Extract project ZIP
+        run: unzip -o MIMA_AI_Agent_Stage1_Starter_Kit.zip -d extracted
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.9'
+
+      - name: Build Android APK
+        run: gradle -p extracted/MimaAIAgentAndroid assembleDebug
+
+      - name: Save APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: MIMA-AI-Agent-APK
+          path: extracted/MimaAIAgentAndroid/app/build/outputs/apk/debug/*.apk
+
