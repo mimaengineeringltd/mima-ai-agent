@@ -30,6 +30,29 @@ jobs:
         with:
           gradle-version: '8.9'
 
+      - name: Align Java and Kotlin versions
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          p = Path('extracted/MIMA_AI_Agent_Stage1/MimaAIAgentAndroid/app/build.gradle.kts')
+          s = p.read_text()
+
+          if 'sourceCompatibility = JavaVersion.VERSION_17' not in s:
+              s = s.replace(
+                  'android {',
+                  '''android {
+              compileOptions {
+                  sourceCompatibility = JavaVersion.VERSION_17
+                  targetCompatibility = JavaVersion.VERSION_17
+              }
+          ''',
+                  1
+              )
+
+          p.write_text(s)
+          PY
+
       - name: Build Android APK
         run: gradle -p extracted/MIMA_AI_Agent_Stage1/MimaAIAgentAndroid assembleDebug
 
